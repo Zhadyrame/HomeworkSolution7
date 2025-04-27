@@ -1,23 +1,31 @@
+package Classes01;
+
+import Classes02.Episode;
+import Classes02.Season;
+import Classes02.Series;
+import interfaces.EpisodeIterator;
+
 import java.util.List;
 
 public class BingeIterator implements EpisodeIterator {
     private List<Season> seasons;
-    private int seasonIndex = 0;
     private EpisodeIterator currentIterator;
+    private int currentSeasonIndex;
 
     public BingeIterator(Series series) {
         this.seasons = series.getSeasons();
+        this.currentSeasonIndex = 0;
         if (!seasons.isEmpty()) {
-            currentIterator = new SeasonIterator(seasons.get(0));
+            this.currentIterator = seasons.get(0).createIterator();
         }
     }
 
     @Override
     public boolean hasNext() {
         while (currentIterator != null && !currentIterator.hasNext()) {
-            seasonIndex++;
-            if (seasonIndex < seasons.size()) {
-                currentIterator = new SeasonIterator(seasons.get(seasonIndex));
+            currentSeasonIndex++;
+            if (currentSeasonIndex < seasons.size()) {
+                currentIterator = seasons.get(currentSeasonIndex).createIterator();
             } else {
                 currentIterator = null;
             }
@@ -27,7 +35,9 @@ public class BingeIterator implements EpisodeIterator {
 
     @Override
     public Episode next() {
-        return currentIterator.next();
+        if (hasNext()) {
+            return currentIterator.next();
+        }
+        return null;
     }
 }
-

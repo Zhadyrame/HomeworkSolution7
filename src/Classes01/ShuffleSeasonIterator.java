@@ -1,24 +1,29 @@
+package Classes01;
+
+import Classes02.Episode;
+import Classes02.Season;
+import interfaces.EpisodeIterator;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.ArrayList;
-import java.util.Random;
 
 public class ShuffleSeasonIterator implements EpisodeIterator {
     private List<Episode> shuffledEpisodes;
-    private int position = 0;
+    private int currentIndex;
 
     public ShuffleSeasonIterator(Season season) {
         this.shuffledEpisodes = new ArrayList<>(season.getEpisodes());
-        Collections.shuffle(shuffledEpisodes, new Random(42)); // fixed seed
+        Collections.shuffle(shuffledEpisodes);
+        this.currentIndex = 0;
     }
 
     @Override
     public boolean hasNext() {
-        return position < shuffledEpisodes.size();
+        return currentIndex < shuffledEpisodes.size();
     }
 
     @Override
     public Episode next() {
-        return shuffledEpisodes.get(position++);
+        return shuffledEpisodes.get(currentIndex++);
     }
 }
